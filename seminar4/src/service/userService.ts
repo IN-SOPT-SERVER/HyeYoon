@@ -6,7 +6,7 @@ const createUser = async (name: string, email: string, age: number) => {
 
   const data = await prisma.user.create({
     data: {
-      userName: name,  //userName으로 받은 거를 name에 담어.
+      userName: name,  //name 이라는 이름으로 받은 값을 userName이라는 필드에 담는다
       age,
       email
     },
