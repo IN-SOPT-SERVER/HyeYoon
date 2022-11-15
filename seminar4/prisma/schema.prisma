@@ -10,6 +10,6 @@ datasource db {
 model User {
   id       Int     @id(map: "user_pk") @unique(map: "user_id_uindex") @default(autoincrement())
   userName String
-  age      Int?
-  email    String? @db.VarChar(400)
+  age      Int
+  email    String @db.VarChar(400)
 }
