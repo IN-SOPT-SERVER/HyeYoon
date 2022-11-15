@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id(map: "user_pk") @unique(map: "user_id_uindex") @default(autoincrement())
+  userName String
+  age      Int
+  email    String @db.VarChar(400)
+}
+
+model Contents {
+  contentsId      Int    @id(map: "contents_pk") @unique(map: "contents_contentid_uindex") @default(autoincrement())
+  contentsName    String @db.VarChar(100)
+  year           Int
+  actorsList     String @db.VarChar(400)
+  genreList      String @db.VarChar(400)
+  titleImgUrl    String
+  featureList    String @db.VarChar(400)
+  howManyEpisode Int
+}
