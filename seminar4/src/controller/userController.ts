@@ -30,12 +30,12 @@ const getAllUser = async ( req : Request, res : Response ) => {
 
 //* 유저 정보 업데이트
 const updateUser = async ( req : Request, res : Response ) => {
-  const { name } = req.body;
+  const { userName } = req.body;
   const { userId } = req.params
-  if(!name)
+  if(!userName)
     return res.status(400).json({ status: 400, message: "유저 업데이트 실패" });
 
-    const updatedUser = await userService.updateUser(+userId, name);
+    const updatedUser = await userService.updateUser(+userId, userName);
     return res.status(200).json({ status: 200, message: "유저 업데이트 성공", updatedUser });
 };
 
@@ -48,7 +48,7 @@ const deleteUser = async ( req : Request, res : Response ) => {
 };
 
 
-
+//* (팟장님 제공) 특정 유저 조회
 const getUserById = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
