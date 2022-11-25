@@ -6,6 +6,8 @@ import { validationResult } from "express-validator";
 import jwtHandler from "../modules/jwtHandler"
 import { success, fail } from  "../constants/response"
 import { UserSignInDTO } from "../interfaces/userSignInDTO";
+import { UserUpdateDTO } from "../interfaces/UserUpdateDTO";
+import { ok } from "assert";
 
 
 
@@ -38,13 +40,15 @@ const getAllUser = async ( req : Request, res : Response ) => {
 
 //* 유저 정보 업데이트
 const updateUser = async ( req : Request, res : Response ) => {
-  const { userName } = req.body;
-  const { userId } = req.params
-  if(!userName)
-    return res.status(400).json({ status: 400, message: "유저 업데이트 실패" });
+  //const { userName } = req.body;
+  //const { userId } = req.params;
+  const UserUpdateDto: UserUpdateDTO = req.body;
 
-    const updatedUser = await userService.updateUser(+userId, userName);
-    return res.status(200).json({ status: 200, message: "유저 업데이트 성공", updatedUser });
+  if(!UserUpdateDto)
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST))
+
+    const updatedUser = await userService.updateUser(UserUpdateDto);
+      return res.status(sc.UPDATED).send(success(sc.UPDATED, rm.UPDATE_USER_SUCCESS))
 };
 
 //* 유저 삭제
@@ -52,7 +56,7 @@ const deleteUser = async ( req : Request, res : Response ) => {
   const { userId } = req.params;
 
   await  userService.deleteUser(+userId);
-  return res.status(200).json({ status: 200, message: "유저 삭제 성공", deleteUser });
+  return res.status(sc.DELETED).send(success(sc.DELETED, rm.DELETE_USER_SUCCESS))
 };
 
 
@@ -64,9 +68,9 @@ const getUserById = async (req: Request, res: Response) => {
   //+userId: 형변환의 꼼수,,? Number(userId)의 편한 버전
 
   if (!data) {
-    return res.status(404).json({ status: 404, message: "NOT_FOUND" });
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST))
   }
-  return res.status(200).json({ status: 200, message: "유저 조회 성공", data });
+  return res.status(sc.OK).send(success(sc.OK, rm.READ_USER_SUCCESS))
 };
 
 //* 유저 생성

@@ -1,3 +1,4 @@
+import { UserUpdateDTO } from './../interfaces/UserUpdateDTO';
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sc } from "../constants";
@@ -46,13 +47,16 @@ const getAllUser = async () => {
 };
 
 //* 유저 정보 업데이트
-const updateUser = async (userId: number, name: string) => {
+const updateUser = async (UserUpdateDTO: UserUpdateDTO) => {
   const data = await prisma.user.update({
     where: {
-      id: userId
+      id: UserUpdateDTO.id
     },
     data: {
-      userName: name
+      userName: UserUpdateDTO.name,
+      age: UserUpdateDTO.age,
+      email: UserUpdateDTO.email
+
     }
   });
   return data;
