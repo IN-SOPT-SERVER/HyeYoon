@@ -6,7 +6,7 @@ import { body } from "express-validator"
 const router: Router = Router();
 
 //router.get("/:userId", userController.getUserById);
-router.get("/:userId", auth, userController.getUserById);
+//router.get("/:userId", auth, userController.getUserById);
 
 //* 유저 생성 - POST api/user
 //router.post('/', userController.createUser);
@@ -19,6 +19,12 @@ router.patch('/:userId', userController.updateUser);
 
 //* 유저 삭제 - DELETE api/user/:userId
 router.delete('/:userId', userController.deleteUser);
+
+//~ 이름으로 유저 검색 - GET api/user.search?keyword={}&option={}
+router.get('/search', userController.searchUserByName)
+
+
+
 
 
 //==== Seminar6

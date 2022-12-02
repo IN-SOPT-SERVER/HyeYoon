@@ -2,5 +2,6 @@
 
 import userService from "./userService";
 import contentsService from "./contentsService";
+import imageService from "./imageService"
 
-export { userService, contentsService };
+export { userService, contentsService, imageService };

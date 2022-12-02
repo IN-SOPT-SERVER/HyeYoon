@@ -7,7 +7,6 @@ import jwtHandler from "../modules/jwtHandler"
 import { success, fail } from  "../constants/response"
 import { UserSignInDTO } from "../interfaces/userSignInDTO";
 import { UserUpdateDTO } from "../interfaces/UserUpdateDTO";
-import { ok } from "assert";
 
 
 
@@ -27,14 +26,23 @@ import { ok } from "assert";
 //   return res.status(200).json({ status: 200, message: "유저 생성 성공", data });
 // };
 
-//* 유저 전체 조회
+//* 유저 전체 조회 + 페이지네이션
 const getAllUser = async ( req : Request, res : Response ) => {
-  const data = await userService.getAllUser();
-  console.log('c_data: ', data)
+  // const data = await userService.getAllUser();
+  // console.log('c_data: ', data)
+  // if (!data) {
+  //   return res.status(400).json({ status: 400, message: "유저 조회 실패" });
+  // }
+  // return res.status(200).json({ status: 200, message: "유저 전체 조회 성공", data });
+
+  //====페이지네이션
+  const { page, limit } = req.query;
+  const data = await userService.getAllUser(Number(page), Number(limit));
   if (!data) {
     return res.status(400).json({ status: 400, message: "유저 조회 실패" });
   }
   return res.status(200).json({ status: 200, message: "유저 전체 조회 성공", data });
+
 
 };
 
@@ -137,6 +145,18 @@ const signInUser = async (req: Request, res: Response) => {
   }
 };
 
+//* GET ~/api/user?keyword = 세훈
+const searchUserByName = async (req: Request, res: Response) => {
+  const { keyword, option } = req.query;
+
+  const data = await userService.searchUserByName(keyword as string, option as string);
+
+  if(!data) {
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SEARCH_USER_FAIL));
+  }
+  return res.status(sc.OK).send(success(sc.OK, rm.SEARCH_USER_SUCCESS, data));
+
+}
 
 
 const userController = {
@@ -146,6 +166,7 @@ const userController = {
   deleteUser,
   getUserById,
   signInUser,
+  searchUserByName,
 };
 
 export default userController;

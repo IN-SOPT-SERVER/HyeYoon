@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import { sc } from "../constants";
 import { UserCreateDTO } from "../interfaces/UserCreateDTO";
 import { UserSignInDTO } from "../interfaces/userSignInDTO";
+import { stringMap } from 'aws-sdk/clients/backup';
+import { KeyObject } from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -41,8 +43,14 @@ const createUser = async (userCreateDto: UserCreateDTO) => {
 
 
 //* 유저 전체 조회
-const getAllUser = async () => {
-  const data = await prisma.user.findMany();
+const getAllUser = async (page: number, limit: number) => {
+  // const data = await prisma.user.findMany();
+  // return data;
+  //==================
+  const data = await prisma.user_seminar6.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
   return data;
 };
 
@@ -105,6 +113,52 @@ const signIn = async (userSignInDto: UserSignInDTO) => {
   }
 };
 
+const searchUserByName = async (keyword: string, option: string) => {
+  
+  //? 유저 최신순
+  if( option == 'desc' ) {
+    const data = await prisma.user_seminar6.findMany({
+      where: {
+        userName: {
+          contains: keyword,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      }
+    })
+    return data;
+  }
+  //? 유저 선착순
+  if( option == 'asc' ) {
+    const data = await prisma.user_seminar6.findMany({
+      where: {
+        userName: {
+          contains: keyword,
+        },
+      },
+      orderBy: {
+        createdAt: 'asc',
+      }
+    })
+    return data;
+  }
+
+  if (option == 'nameDesc') {
+    const data = await prisma.user_seminar6.findMany({
+      where: {
+        userName: {
+          contains: keyword
+        },
+      },
+      orderBy: {
+        userName: 'desc',
+      }
+    })
+    return data;
+  }
+}
+
 
 const userService = {
   createUser,
@@ -113,6 +167,7 @@ const userService = {
   deleteUser,
   getUserById,
   signIn,
+  searchUserByName,
 };
 
 export default userService;

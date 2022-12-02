@@ -3,5 +3,6 @@
 
 import userController from "./userController";
 import contentsController from "./contentsController";
+import imageController from "./imageController";
 
-export { userController, contentsController };
+export { userController, contentsController, imageController };
